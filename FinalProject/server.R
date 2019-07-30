@@ -13,6 +13,38 @@ server <- function(input, output) {
   library(rpart)
   library(rpart.plot)
   
+  #######################################################
+  
+  # Information Tab
+  ##Need to have InformationTab.Rmd file for this to work
+  # function to render .Rmd files to html
+  inclRmd <- function(path, r_env = parent.frame()) {
+    encoding <- getOption("shiny.site.encoding", default = "UTF-8")
+    paste(
+      readLines(path, warn = FALSE, encoding = encoding),
+      collapse = '\n'
+    ) %>%
+      knitr::knit2html(
+        text = .,
+        fragment.only = TRUE,
+        envir = r_env,
+        options = "",
+        stylesheet = "",
+        encoding = encoding
+      ) %>%
+      gsub("&lt;!--/html_preserve--&gt;","",.) %>%  ## knitr adds this
+      gsub("&lt;!--html_preserve--&gt;","",.) %>%   ## knitr adds this
+      HTML
+  }
+  
+  #Formatted text for information tab
+  output$page1 <- renderUI({
+    inclRmd("InformationTab.Rmd")
+  })
+  
+  
+  ######################################################
+  
   #Process Data
   ProcessData <- reactive({
     dataset <- read_csv("movie_metadataupdated.csv")
@@ -236,10 +268,6 @@ server <- function(input, output) {
     ModTrain <- ModData[Train, ]
     ModTest <- ModData[Test, ]
     
-    # Tree Model
-    #class.tree <- rpart(gross ~ ., data = ModTrain)
-    #prp(class.tree, type = 1, extra = 1, under = TRUE, split.font = 4, varlen = 0)
-    #})
     
     # Tree Model
     if(input$TreePick){

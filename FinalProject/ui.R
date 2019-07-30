@@ -14,7 +14,7 @@ ui <- fluidPage(
       #Menu with PCA fill variable
       selectizeInput("pcaVariable", "Select fill variable for PCA Model", choices = list("genres", "country")),
       #Menu with genre options
-      selectizeInput("genres", "Select genres for Histogram", choices = list("Action", "Adventure", "Animation", "Comedy", "Drama", "Fantasy", "Horror")),
+      selectizeInput("genres", "Select genres for Numeric and Graphical Summaries", choices = list("Action", "Adventure", "Animation", "Comedy", "Drama", "Fantasy", "Horror")),
       #Menu with variable options
       selectizeInput("variable", "Select Variable for Linear Regression Model", choices = list("imdb_score", "cast total facebook likes")),
       numericInput("predictvalue", "Choose a value and a prediction will be made for the linear regression model", value = 9),
@@ -25,7 +25,9 @@ ui <- fluidPage(
       
       # Output: Tabset w/ plot, summary, and table ----
       tabsetPanel(type = "tabs",
-                  tabPanel("Information"),
+                  tabPanel("Information", uiOutput("page1")),
+                          #fluidRow(
+                            #column(8, includeMarkdown("InformationTab.Rmd")))),
                   tabPanel("PCA Plot", plotOutput("PCAplot")),
                   tabPanel("Table", downloadButton("downloadData", "Download"), DT::dataTableOutput("table")),
                   tabPanel("Data Summary", 

@@ -1,0 +1,43 @@
+---
+title: "InformationTab"
+author: "Kelly Craig"
+date: "7/30/2019"
+output: html_document
+---
+
+Information Page
+=======================
+
+# Purpose:
+Blah blah
+
+# Data Collection:
+* This data set was found from Kaggle. The author scraped over 5000 movies from the IMDB website using a Python library called scrapy. To access the data, check [this website.](https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset)  
+
+* I further processed this data to take out any lines with missing variables. 
+
+* The variables included in this data set are: 
+
+  + director_name 
+  + num_critic_for_reviews 
+  + duration 
+  + gross 
+  + genres 
+  + movie_title 
+  + num_voted_users 
+  + cast_total_facebook_likes
+  + num_user_for_reviews 
+  + language 
+  + country
+  + content_rating 
+  + budget 
+  + title_year 
+  + inbd_score 
+  + aspect_ratio 
+  + movie_facebook_likes
+
+# Movie App
+* The sidebar panel has 3 drop down menus to allow the user to select variables:
+1. The first drop down menu is 'select fill variable for PCA Model'. The user can select 'genres' or 'country' to change the variable for the PCA Plot.
+2. The second drop down menu called 'Select genres for Numeric and Graphical Summaries' allows the user to select the genre for the summaries on the data summary tab.
+3. The third drop down menu called 
