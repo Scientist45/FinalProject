@@ -1,13 +1,7 @@
 # Define server logic for random distribution app ----
+library(readr)
 dataset <- read_csv("movie_metadataupdated.csv")
-library(tidyverse)
-library(factoextra)
-library(devtools)
-library(DT)
-library(caret)
-library(shiny)
-library(rpart)
-library(rpart.plot)
+
 
 server <- function(input, output) {
   library(tidyverse)
