@@ -12,6 +12,8 @@ server <- function(input, output) {
   library(shiny)
   library(rpart)
   library(rpart.plot)
+  library(rattle)
+  library(RColorBrewer)
   
   #######################################################
   
@@ -106,6 +108,13 @@ server <- function(input, output) {
     Data3
   })
   
+  tabledata <- reactive({
+  dataset2 <- ProcessData()
+  Data2 <- dataset2 %>% arrange(desc(gross))
+  Data2 <- Data2[1:500,]
+  Data3 <- Data2 %>% select("director_name", "gross", "genres", "movie_title", "budget", "title_year", "imdb_score")
+  Data3
+})
   ########################################
   
   #download table
@@ -114,7 +123,7 @@ server <- function(input, output) {
       paste("downloadData", "csv", sep=".")
     },
     content= function(file){
-      write.csv(Data3, file)
+      write.csv(tabledata(), file)
     }
   )
   
@@ -129,10 +138,9 @@ server <- function(input, output) {
     datagenres
   })
   
-  ######################################
+  ################################################
   
-  # Histogram download code
-  #Not Needed? #hisPlotData <- reactive(getData())
+  # Histogram plotting and setup for download button
   
   hisPlotSetup <- reactive(
     ggplot(data = getData(), aes(x = gross)) +
@@ -140,19 +148,25 @@ server <- function(input, output) {
   )
   
   output$hisPlot <- renderPlot(hisPlotSetup())
-  
-  ########################################
+  ######################################
   
   #His plot info
   output$hisInfo <- renderText({
     #Get data
     hisInfo <- getData()
     #paste
-    paste("The average gross profit for", input$genres, "is", round(mean(hisInfo$gross)))
+    paste("The mean gross profit for", input$genres, "is", round(mean(hisInfo$gross)))
   })
   
-  ################################################
+  output$math <- renderUI({
+    withMathJax(helpText('Mean Equation: $$Mean = \\frac{\\sum_{}X}n \\cdot$$'))
+  })
   
+  output$math2 <- renderUI({
+    withMathJax(sprintf("Where \\(X\\) is the sum of gross values and \\(n\\) is the number of items aka count."))
+  })
+  
+  ########################################
   # Histogram Plot download button code
   output$downloadPlot <- downloadHandler(
     filename = "hisPlot.png" ,
@@ -196,7 +210,7 @@ server <- function(input, output) {
     #Plot the linear regression Model with variable selected on drop down menu
     if(input$variable == "imdb_score"){
       #plot imbd_score and gross
-      plot(ModData$imdb_score, ModData$gross)
+      plot(ModData$imdb_score, ModData$gross, xlab = "IMDB Score", ylab = "Gross Profit", main = "IMDB Score vs Gross Profit")
       #fit linear model
       lmline1 <- lm(gross ~ imdb_score, ModData)
       #graph fit line
@@ -204,7 +218,7 @@ server <- function(input, output) {
     }
     else{
       #plot cast total facebook lines and gross
-      plot(ModData$cast_total_facebook_likes, ModData$gross)
+      plot(ModData$cast_total_facebook_likes, ModData$gross, xlab = "Cast Total Facebook Likes", ylab = "Gross Profit", main = "Cast Total Facebook Likes vs Gross Profit")
       #fit linear model
       lmline2 <- lm(gross ~ cast_total_facebook_likes, ModData)
       #graph fit line
@@ -214,7 +228,7 @@ server <- function(input, output) {
   })
   
   #################################################
-  
+  #Click on the plot and get output
   output$info <- renderText({
     paste0("Click points on the graph to find the ", input$variable, " and Gross Profit values for individual points", "\n", input$variable, " is equal to ", input$plot_click$x, "\n", "Gross Profit is equal to ", input$plot_click$y)
   })
@@ -270,7 +284,10 @@ server <- function(input, output) {
     
     
     # Tree Model
-    if(input$TreePick){
+    if(input$TreePick & input$fancy){
+      class.tree <- rpart(gross ~ ., data = ModTrain)
+      fancyRpartPlot(class.tree)
+    } else if (input$TreePick){
       class.tree <- rpart(gross ~ ., data = ModTrain)
       prp(class.tree, type = 1, extra = 1, under = TRUE, split.font = 4, varlen = 0)
     } else {

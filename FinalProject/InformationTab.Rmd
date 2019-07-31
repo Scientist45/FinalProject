@@ -8,11 +8,11 @@ output: html_document
 Information Page
 =======================
 
-# Purpose:
-Blah blah
+## Purpose:
+The purpose of this analysis is to find what movie related variables contribute to *gross profit.* 
 
-# Data Collection:
-* This data set was found from Kaggle. The author scraped over 5000 movies from the IMDB website using a Python library called scrapy. To access the data, check [this website.](https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset)  
+## Data Collection:
+* This data set was found from **Kaggle.** The author scraped over 5000 movies from the IMDB website using a Python library called scrapy. To access the data, check [this website.](https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset)  
 
 * I further processed this data to take out any lines with missing variables. 
 
@@ -36,8 +36,31 @@ Blah blah
   + aspect_ratio 
   + movie_facebook_likes
 
-# Movie App
-* The sidebar panel has 3 drop down menus to allow the user to select variables:
+## User Selection Options
+
+### Drop down menus
+* The sidebar panel has 3 drop down menus to allow the user to *select variables*:
+
 1. The first drop down menu is 'select fill variable for PCA Model'. The user can select 'genres' or 'country' to change the variable for the PCA Plot.
 2. The second drop down menu called 'Select genres for Numeric and Graphical Summaries' allows the user to select the genre for the summaries on the data summary tab.
-3. The third drop down menu called 
+3. The third drop down menu called 'Select Variable for Linear Regression Model' allows the user to select the imdb_score or cast total facebook like for the linear regression model.
+
+### Numeric input
+There is a numeric input function called 'Choose a value and a prediction will be made for the linear regression model.' The user can input a value and a prediction will be made for the linear regression model on the model tab. The prediction also changes based on the variable selected in the drop down menu. 
+
+### Checkbox
+There is a check box called 'include Budget on the Tree Model?' which allows the user to include of exclude the budget variable in the Tree model.  
+
+## Visual Output
+
+### PCA Plot Tab
+There is a PCA Plot that shows the correlation between duration, gross, cast_total_facebook_likes, budget, title_year, and imdb_score. The closer the points are together the more similar they are to each other. Variable pointed the same direction are more correlated than variable going opposite directions. The fill color is selected by the user and it can be either genres or country.
+
+### Table Tab
+The table tab allows the user to scroll through relevant data.
+
+### Data Summary Tab
+The data summary tab has a histogram with gross profit and counts dependent on the genre the user selects from the from down menu. There is a numeric gross profit average that is calculated for the selected genre. There is also a summary table that changes based on the user select genre. 
+
+### Modeling Tab
+There are two models on the modeling tab: A linear regression model and a tree model.The linear regression model changes the variable depending what the user selects. There is also a point and click feature on the linear regression map that prints the variable score and the gross profit for a selected point on the map. The user can also write in a number into the number input box and find out a prediction. The tree model can be modified depending on if the user checks if budget should be included in the tree model. 
